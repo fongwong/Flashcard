@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>幼兒認知 Flashcard 遊戲</title>
- <style>
+  <style>
     * {
       box-sizing: border-box;
       user-select: none;
@@ -164,14 +164,15 @@
       font-size: 28px;
     }
     
-    /* 🌟 調整 3 個選項卡片的大小與之前一致（大正方形或統一厚邊框風格） */
+    /* 🌟 金字塔排版：上 1 個，下 2 個 */
     .card-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       gap: 15px;
       width: 100%;
-      max-width: 500px;
-      margin: 20px 0;
+      max-width: 420px;
+      margin: 15px 0;
     }
     .card {
       background: #FFFFFF;
@@ -186,16 +187,31 @@
       cursor: pointer;
       transition: transform 0.1s, border-color 0.2s;
     }
+    .card-top {
+      width: 48%;
+      max-width: 190px;
+    }
+    .card-row-bottom {
+      display: flex;
+      gap: 15px;
+      width: 100%;
+      justify-content: center;
+    }
+    .card-row-bottom .card {
+      width: 48%;
+      max-width: 190px;
+    }
+
     .card:active {
       transform: translateY(4px);
       box-shadow: 0 4px 0 #2B6CB0;
     }
     .card-emoji {
-      font-size: 70px;
+      font-size: 75px;
       line-height: 1;
     }
     .card-label {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
       color: #4A5568;
       margin-top: 8px;
@@ -224,7 +240,7 @@
       display: flex;
       justify-content: space-between;
       width: 100%;
-      max-width: 500px;
+      max-width: 420px;
       align-items: center;
       padding: 10px 0;
     }
@@ -365,7 +381,6 @@
       Object.keys(tempMap).forEach(topic => {
         const contentStr = tempMap[topic].join('\n');
         const parsedItems = parseTextToItems(contentStr);
-        // 🌟 門檻改為 3 個選項即可
         if (parsedItems.length >= 3) {
           topicDataMap[topic] = contentStr;
           validCount++;
@@ -378,7 +393,7 @@
         document.getElementById('pastedText').value = '';
         alert(`成功解析並儲存 ${validCount} 個主題卡片！`);
       } else {
-        alert('未找到有效的題目，請確保每個主題至少有 3 個選項（格式：名稱,Emoji）！');
+        alert('未找到有效的題目，請確保每個主題至少有 3 個選項！');
       }
     }
 
@@ -483,7 +498,6 @@
     function nextQuestion() {
       isLock = false;
       const shuffled = [...items].sort(() => 0.5 - Math.random());
-      // 🌟 每次隨機抽取 3 個選項
       const choices = shuffled.slice(0, 3);
       currentTarget = choices[Math.floor(Math.random() * choices.length)];
 
@@ -492,16 +506,31 @@
       const grid = document.getElementById('cardGrid');
       grid.innerHTML = '';
 
-      choices.forEach(item => {
+      // 🌟 核心修改：製作「上 1 個，下 2 個」的金字塔排版
+      const topDiv = document.createElement('div');
+      topDiv.className = 'card card-top';
+      topDiv.innerHTML = `
+        <div class="card-emoji">${choices[0].emoji}</div>
+        <div class="card-label">${choices[0].name}</div>
+      `;
+      topDiv.onclick = () => checkAnswer(choices[0], topDiv);
+
+      const bottomRow = document.createElement('div');
+      bottomRow.className = 'card-row-bottom';
+
+      for (let i = 1; i < 3; i++) {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-          <div class="card-emoji">${item.emoji}</div>
-          <div class="card-label">${item.name}</div>
+          <div class="card-emoji">${choices[i].emoji}</div>
+          <div class="card-label">${choices[i].name}</div>
         `;
-        card.onclick = () => checkAnswer(item, card);
-        grid.appendChild(card);
-      });
+        card.onclick = () => checkAnswer(choices[i], card);
+        bottomRow.appendChild(card);
+      }
+
+      grid.appendChild(topDiv);
+      grid.appendChild(bottomRow);
 
       setTimeout(() => {
         speakQuestion();
@@ -531,6 +560,8 @@
         });
       }
     }
+
+    function playAndDiv(text, callback) {}
 
     function playAndDo(text, callback) {
       if ('speechSynthesis' in window) {
