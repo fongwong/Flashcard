@@ -27,47 +27,86 @@
     }
     h1 {
       color: #D97706;
-      font-size: 26px;
-      margin-bottom: 10px;
+      font-size: 24px;
+      margin-bottom: 8px;
     }
     .tip-text {
       color: #666;
       font-size: 15px;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       line-height: 1.4;
+    }
+    .input-section {
+      background: #FFFFFF;
+      border: 3px solid #FFD166;
+      border-radius: 20px;
+      padding: 15px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .input-section label {
+      font-weight: bold;
+      color: #D97706;
+      font-size: 16px;
+    }
+    textarea {
+      width: 100%;
+      height: 130px;
+      border: 2px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 15px;
+      resize: none;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: #FFB300;
     }
     .btn-group {
       display: flex;
       gap: 10px;
-      margin-bottom: 15px;
+      width: 100%;
     }
-    .load-btn {
+    .action-btn {
+      flex: 1;
       background-color: #FFB300;
       color: #333;
       border: none;
-      padding: 10px 18px;
+      padding: 12px 10px;
       font-size: 16px;
       font-weight: bold;
-      border-radius: 16px;
+      border-radius: 14px;
       box-shadow: 0 4px 0 #E0A800;
       cursor: pointer;
+      text-align: center;
     }
-    .load-btn:active {
+    .action-btn:active {
       transform: translateY(2px);
       box-shadow: 0 2px 0 #E0A800;
     }
-    
-    /* 🌟 改用 Grid 雙欄大卡片排版 */
+    .secondary-btn {
+      background-color: #4D96FF;
+      color: white;
+      box-shadow: 0 4px 0 #2B6CB0;
+    }
+    .secondary-btn:active {
+      box-shadow: 0 2px 0 #2B6CB0;
+    }
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
+      gap: 16px;
       width: 100%;
       max-width: 480px;
       margin-top: 10px;
     }
-    
-    /* 🌟 類似遊戲 Flashcard 的主題大卡片 UI */
     .theme-card {
       background: #FFFFFF;
       border: 4px solid #4D96FF;
@@ -80,19 +119,19 @@
       box-shadow: 0 8px 0 #2B6CB0;
       cursor: pointer;
       transition: transform 0.1s;
-      min-height: 140px;
+      min-height: 130px;
     }
     .theme-card:active {
       transform: translateY(4px);
       box-shadow: 0 4px 0 #2B6CB0;
     }
     .theme-icon {
-      font-size: 55px;
+      font-size: 50px;
       line-height: 1;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .theme-title {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
       color: #333;
     }
@@ -124,40 +163,40 @@
     .speaker-icon {
       font-size: 28px;
     }
+    /* 🌟 改為 3 個選項卡片排版（置中並排或單行排版） */
     .card-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
       width: 100%;
-      max-width: 500px;
-      margin: 20px 0;
+      max-width: 400px;
+      margin: 15px 0;
     }
     .card {
       background: #FFFFFF;
       border: 4px solid #4D96FF;
-      border-radius: 25px;
-      aspect-ratio: 1;
+      border-radius: 20px;
+      padding: 12px 20px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 0 #2B6CB0;
+      justify-content: flex-start;
+      gap: 20px;
+      box-shadow: 0 6px 0 #2B6CB0;
       cursor: pointer;
       transition: transform 0.1s, border-color 0.2s;
     }
     .card:active {
-      transform: translateY(4px);
-      box-shadow: 0 4px 0 #2B6CB0;
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #2B6CB0;
     }
     .card-emoji {
-      font-size: 80px;
+      font-size: 55px;
       line-height: 1;
     }
     .card-label {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: bold;
       color: #4A5568;
-      margin-top: 8px;
     }
     .correct {
       border-color: #6BCB77 !important;
@@ -170,7 +209,7 @@
     }
     @keyframes pop {
       0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
+      50% { transform: scale(1.05); }
       100% { transform: scale(1); }
     }
     @keyframes shake {
@@ -182,7 +221,7 @@
       display: flex;
       justify-content: space-between;
       width: 100%;
-      max-width: 500px;
+      max-width: 400px;
       align-items: center;
       padding: 10px 0;
     }
@@ -210,17 +249,22 @@
   <div id="homeScreen" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
     <header>
       <h1>🌟 寶貝認知學習樂園 🌟</h1>
-      <p class="tip-text" id="tipText">請選擇一個主題：</p>
+      <p class="tip-text" id="tipText">貼上題目解析主題，或選擇現有卡片：</p>
     </header>
 
-    <div class="btn-group">
-      <button class="load-btn" onclick="document.getElementById('folderInput').click()">📂 選擇/更新題庫資料夾</button>
+    <!-- ✍️ 文字貼上區 -->
+    <div class="input-section">
+      <label for="pastedText">📝 貼上文字（用「主題:」分區）：</label>
+      <textarea id="pastedText" placeholder="主題: 動物&#10;狗狗,🐶&#10;貓咪,🐱&#10;兔子,🐰&#10;&#10;主題: 水果&#10;蘋果,🍎&#10;香蕉,🍌&#10;提子,🍇"></textarea>
+      
+      <div class="btn-group">
+        <button class="action-btn" onclick="parseAndSaveMultiTopics()">⚡ 解析並儲存主題</button>
+        <button class="action-btn secondary-btn" onclick="document.getElementById('folderInput').click()">📂 載入Txt資料夾</button>
+      </div>
+      <input type="file" id="folderInput" webkitdirectory directory multiple style="display: none;" onchange="loadFiles(event)">
     </div>
-    <input type="file" id="folderInput" webkitdirectory directory multiple style="display: none;" onchange="loadFiles(event)">
 
-    <div class="menu-grid" id="menuContainer">
-      <p style="grid-column: span 2; text-align: center; color: #888;">載入中...</p>
-    </div>
+    <div class="menu-grid" id="menuContainer"></div>
   </div>
 
   <!-- 遊戲畫面 -->
@@ -249,14 +293,8 @@
     let score = 0;
     let isLock = false;
 
-    // 常見主題預設 Emoji 圖案（如果未能抓到，會自動用第一個題目的 Emoji）
     const presetIcons = {
-      '動物': '🐶',
-      '水果': '🍎',
-      '交通': '🚗',
-      '蔬菜': '🥦',
-      '顏色': '🎨',
-      '數字': '🔢'
+      '動物': '🐶', '水果': '🍎', '交通': '🚗', '蔬菜': '🥦', '顏色': '🎨', '數字': '🔢'
     };
 
     window.onload = () => {
@@ -265,14 +303,81 @@
         try {
           topicDataMap = JSON.parse(savedData);
           renderMenu();
-        } catch (e) {
-          document.getElementById('menuContainer').innerHTML = '<p style="grid-column: span 2; text-align: center; color: #666;">請點擊上方按鈕選擇題庫資料夾</p>';
-        }
-      } else {
-        document.getElementById('tipText').innerText = '請點擊下方按鈕，選擇你的題庫資料夾：';
-        document.getElementById('menuContainer').innerHTML = '<p style="grid-column: span 2; text-align: center; color: #888;">(尚未載入題庫，請先選取資料夾)</p>';
+        } catch (e) {}
       }
     };
+
+    function parseTextToItems(rawText) {
+      if (!rawText) return [];
+      const lines = rawText.split(/\r?\n|\r/);
+      const parsedItems = [];
+
+      lines.forEach(line => {
+        const cleaned = line.trim();
+        if (cleaned.length > 0) {
+          const parts = cleaned.split(/[,，]/);
+          if (parts.length >= 2) {
+            parsedItems.push({
+              name: parts[0].trim(),
+              emoji: parts[1].trim()
+            });
+          }
+        }
+      });
+
+      return parsedItems;
+    }
+
+    function parseAndSaveMultiTopics() {
+      const rawText = document.getElementById('pastedText').value.trim();
+      if (!rawText) {
+        alert('請先貼上文字內容！');
+        return;
+      }
+
+      const lines = rawText.split(/\r?\n|\r/);
+      let currentTopic = '自訂主題';
+      let tempMap = {};
+
+      lines.forEach(line => {
+        const cleaned = line.trim();
+        if (!cleaned) return;
+
+        const headerMatch = cleaned.match(/^(?:主題|Topic)\s*[:：]\s*(.+)$/i) \vert{}\vert{} cleaned.match(/^===\s*(.+?)\s*===$/);
+        
+        if (headerMatch) {
+          currentTopic = headerMatch[1].trim();
+          if (!tempMap[currentTopic]) {
+            tempMap[currentTopic] = [];
+          }
+        } else {
+          if (!tempMap[currentTopic]) {
+            tempMap[currentTopic] = [];
+          }
+          tempMap[currentTopic].push(cleaned);
+        }
+      });
+
+      let validCount = 0;
+      Object.keys(tempMap).forEach(topic => {
+        const contentStr = tempMap[topic].join('\n');
+        const parsedItems = parseTextToItems(contentStr);
+        // 🌟 門檻改為 3 個選項即可
+        if (parsedItems.length >= 3) {
+          topicDataMap[topic] = contentStr;
+          validCount++;
+        }
+      });
+
+      if (validCount > 0) {
+        localStorage.setItem('flashcard_topics', JSON.stringify(topicDataMap));
+        renderMenu();
+        document.getElementById('pastedText').value = '';
+        alert(`成功解析並儲存 ${validCount} 個主題卡片！`);
+      } else {
+        alert('未找到有效的題目，請確保每個主題至少有 3 個選項（格式：名稱,Emoji）！');
+      }
+    }
 
     async function loadFiles(event) {
       const files = event.target.files;
@@ -295,20 +400,15 @@
         renderMenu();
         alert(`成功載入 ${txtCount} 個主題！`);
       } else {
-        alert('找不到任何 .txt 檔案，請重新選擇！');
+        alert('找不到任何 .txt 檔案！');
       }
     }
 
-    // 動態獲取主題圖案：先看有無預設，否則自動抓取 txt 第一個題目的 Emoji
     function getThemeEmoji(themeName, textContent) {
       if (presetIcons[themeName]) return presetIcons[themeName];
-      
-      const lines = textContent.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-      if (lines.length > 0) {
-        const parts = lines[0].split(',');
-        if (parts[1] && parts[1].trim()) {
-          return parts[1].trim();
-        }
+      const parsed = parseTextToItems(textContent);
+      if (parsed.length > 0 && parsed[0].emoji) {
+        return parsed[0].emoji;
       }
       return '📁';
     }
@@ -318,12 +418,7 @@
       menuContainer.innerHTML = '';
       
       const themes = Object.keys(topicDataMap);
-      if (themes.length === 0) {
-        menuContainer.innerHTML = '<p style="grid-column: span 2; text-align: center; color: red;">沒有找到主題資料！</p>';
-        return;
-      }
-
-      document.getElementById('tipText').innerText = '請選擇一個主題：';
+      if (themes.length === 0) return;
 
       themes.forEach(themeName => {
         const textContent = topicDataMap[themeName];
@@ -341,141 +436,4 @@
     }
 
     function speak(text) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'zh-HK';
-        utterance.rate = 0.9;
-        window.speechSynthesis.speak(utterance);
-      }
-    }
-
-    function speakQuestion() {
-      if (currentTarget) {
-        speak(`邊個係${currentTarget.name}呀？`);
-      }
-    }
-
-    function startGame(themeName) {
-      const text = topicDataMap[themeName];
-      if (!text) return;
-
-      items = text.split('\n')
-        .map(line => line.trim())
-        .filter(line => line.length > 0)
-        .map(line => {
-          const parts = line.split(',');
-          return { 
-            name: parts[0] ? parts[0].trim() : '', 
-            emoji: parts[1] ? parts[1].trim() : '❓' 
-          };
-        });
-
-      if (items.length < 4) {
-        alert(`主題「${themeName}」的題目少於 4 個，請檢查該 txt 檔案內容！`);
-        return;
-      }
-
-      document.getElementById('homeScreen').style.display = 'none';
-      document.getElementById('gameScreen').style.display = 'flex';
-      score = 0;
-      document.getElementById('score').innerText = score;
-
-      nextQuestion();
-    }
-
-    function returnHome() {
-      window.speechSynthesis.cancel();
-      document.getElementById('gameScreen').style.display = 'none';
-      document.getElementById('homeScreen').style.display = 'flex';
-    }
-
-    function nextQuestion() {
-      isLock = false;
-      const shuffled = [...items].sort(() => 0.5 - Math.random());
-      const choices = shuffled.slice(0, 4);
-      currentTarget = choices[Math.floor(Math.random() * choices.length)];
-
-      document.getElementById('questionText').innerText = `邊個係 ${currentTarget.name}？`;
-      
-      const grid = document.getElementById('cardGrid');
-      grid.innerHTML = '';
-
-      choices.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <div class="card-emoji">${item.emoji}</div>
-          <div class="card-label">${item.name}</div>
-        `;
-        card.onclick = () => checkAnswer(item, card);
-        grid.appendChild(card);
-      });
-
-      setTimeout(() => {
-        speakQuestion();
-      }, 300);
-    }
-
-   function checkAnswer(selectedItem, cardElement) {
-      if (isLock) return;
-
-      if (selectedItem.name === currentTarget.name) {
-        isLock = true;
-        cardElement.classList.add('correct');
-        score++;
-        document.getElementById('score').innerText = score;
-
-        playAndDo(`答對咗！呢個係${selectedItem.name}！`, () => {
-          nextQuestion();
-        });
-      } else {
-        cardElement.classList.add('wrong');
-        setTimeout(() => {
-          cardElement.classList.remove('wrong');
-        }, 500);
-
-        // ❌ 答錯時：讀出「呢個係xxx」，講完後自動再讀一次題目
-        playAndDo(`呢個係${selectedItem.name}`, () => {
-          speakQuestion();
-        });
-      }
-    }
-
-    // 🌟 共用的語音播放與回調函式：確保講完第一句話後，才執行下一步動作
-    function playAndDo(text, callback) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'zh-HK';
-        utterance.rate = 0.9;
-        
-        utterance.onend = () => {
-          if (callback) callback();
-        };
-
-        window.speechSynthesis.speak(utterance);
-      } else {
-        if (callback) callback();
-      }
-    }
-
-    function playCorrectAndNext(text) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'zh-HK';
-        utterance.rate = 0.9;
-        utterance.onend = () => {
-          nextQuestion();
-        };
-        window.speechSynthesis.speak(utterance);
-      } else {
-        setTimeout(() => {
-          nextQuestion();
-        }, 1000);
-      }
-    }
-  </script>
-</body>
-</html>
+      if ('speechSynthesis'
