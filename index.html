@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>幼兒認知 Flashcard 遊戲</title>
-  <style>
+ <style>
     * {
       box-sizing: border-box;
       user-select: none;
@@ -163,41 +163,44 @@
     .speaker-icon {
       font-size: 28px;
     }
-    /* 🌟 改為 3 個選項卡片排版（置中並排或單行排版） */
+    
+    /* 🌟 調整 3 個選項卡片的大小與之前一致（大正方形或統一厚邊框風格） */
     .card-grid {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 15px;
       width: 100%;
-      max-width: 400px;
-      margin: 15px 0;
+      max-width: 500px;
+      margin: 20px 0;
     }
     .card {
       background: #FFFFFF;
       border: 4px solid #4D96FF;
-      border-radius: 20px;
-      padding: 12px 20px;
+      border-radius: 25px;
+      aspect-ratio: 1;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      gap: 20px;
-      box-shadow: 0 6px 0 #2B6CB0;
+      justify-content: center;
+      box-shadow: 0 8px 0 #2B6CB0;
       cursor: pointer;
       transition: transform 0.1s, border-color 0.2s;
     }
     .card:active {
-      transform: translateY(3px);
-      box-shadow: 0 3px 0 #2B6CB0;
+      transform: translateY(4px);
+      box-shadow: 0 4px 0 #2B6CB0;
     }
     .card-emoji {
-      font-size: 55px;
+      font-size: 70px;
       line-height: 1;
     }
     .card-label {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: bold;
       color: #4A5568;
+      margin-top: 8px;
     }
+    
     .correct {
       border-color: #6BCB77 !important;
       background-color: #E8F8EA !important;
@@ -209,7 +212,7 @@
     }
     @keyframes pop {
       0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+      50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
     @keyframes shake {
@@ -221,7 +224,7 @@
       display: flex;
       justify-content: space-between;
       width: 100%;
-      max-width: 400px;
+      max-width: 500px;
       align-items: center;
       padding: 10px 0;
     }
