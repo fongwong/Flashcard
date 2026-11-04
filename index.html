@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>幼兒認知 Flashcard 遊戲</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #FFF9E6;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      margin-top: 10px;
+    }
+    h1 {
+      color: #D97706;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .tip-text {
+      color: #666;
+      font-size: 15px;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .input-section {
+      background: #FFFFFF;
+      border: 3px solid #FFD166;
+      border-radius: 20px;
+      padding: 15px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .input-section label {
+      font-weight: bold;
+      color: #D97706;
+      font-size: 16px;
+    }
+    textarea {
+      width: 100%;
+      height: 130px;
+      border: 2px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 15px;
+      resize: none;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: #FFB300;
+    }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+    .action-btn {
+      flex: 1;
+      background-color: #FFB300;
+      color: #333;
+      border: none;
+      padding: 12px 10px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 14px;
+      box-shadow: 0 4px 0 #E0A800;
+      cursor: pointer;
+      text-align: center;
+    }
+    .action-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #E0A800;
+    }
+    .secondary-btn {
+      background-color: #4D96FF;
+      color: white;
+      box-shadow: 0 4px 0 #2B6CB0;
+    }
+    .secondary-btn:active {
+      box-shadow: 0 2px 0 #2B6CB0;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      width: 100%;
+      max-width: 480px;
+      margin-top: 10px;
+    }
+    .theme-card {
+      background: #FFFFFF;
+      border: 4px solid #4D96FF;
+      border-radius: 25px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 0 #2B6CB0;
+      cursor: pointer;
+      transition: transform 0.1s;
+      min-height: 130px;
+    }
+    .theme-card:active {
+      transform: translateY(4px);
+      box-shadow: 0 4px 0 #2B6CB0;
+    }
+    .theme-icon {
+      font-size: 50px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .theme-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .game-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      flex-grow: 1;
+      justify-content: space-between;
+    }
+    .question-box {
+      background-color: #FFD166;
+      border-radius: 20px;
+      padding: 15px 25px;
+      box-shadow: 0 8px 0 #E0A800;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .question-text {
+      font-size: 26px;
+      font-weight: bold;
+      color: #333;
+    }
+    .speaker-icon {
+      font-size: 28px;
+    }
+    /* 🌟 改為 3 個選項卡片排版（置中並排或單行排版） */
+    .card-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      max-width: 400px;
+      margin: 15px 0;
+    }
+    .card {
+      background: #FFFFFF;
+      border: 4px solid #4D96FF;
+      border-radius: 20px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 20px;
+      box-shadow: 0 6px 0 #2B6CB0;
+      cursor: pointer;
+      transition: transform 0.1s, border-color 0.2s;
+    }
+    .card:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #2B6CB0;
+    }
+    .card-emoji {
+      font-size: 55px;
+      line-height: 1;
+    }
+    .card-label {
+      font-size: 24px;
+      font-weight: bold;
+      color: #4A5568;
+    }
+    .correct {
+      border-color: #6BCB77 !important;
+      background-color: #E8F8EA !important;
+      animation: pop 0.4s ease;
+    }
+    .wrong {
+      border-color: #FF6B6B !important;
+      animation: shake 0.4s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 400px;
+      align-items: center;
+      padding: 10px 0;
+    }
+    .back-btn {
+      background-color: #FF6B6B;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 12px;
+      box-shadow: 0 4px 0 #C53030;
+      cursor: pointer;
+    }
+    .score-board {
+      font-size: 18px;
+      font-weight: bold;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 首頁選單 -->
+  <div id="homeScreen" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+    <header>
+      <h1>🌟 寶貝認知學習樂園 🌟</h1>
+      <p class="tip-text" id="tipText">貼上題目解析主題，或選擇現有卡片：</p>
+    </header>
+
+    <!-- ✍️ 文字貼上區 -->
+    <div class="input-section">
+      <label for="pastedText">📝 貼上文字（用「主題:」分區）：</label>
+      <textarea id="pastedText" placeholder="主題: 動物&#10;狗狗,🐶&#10;貓咪,🐱&#10;兔子,🐰&#10;&#10;主題: 水果&#10;蘋果,🍎&#10;香蕉,🍌&#10;提子,🍇"></textarea>
+      
+      <div class="btn-group">
+        <button class="action-btn" onclick="parseAndSaveMultiTopics()">⚡ 解析並儲存主題</button>
+        <button class="action-btn secondary-btn" onclick="document.getElementById('folderInput').click()">📂 載入Txt資料夾</button>
+      </div>
+      <input type="file" id="folderInput" webkitdirectory directory multiple style="display: none;" onchange="loadFiles(event)">
+    </div>
+
+    <div class="menu-grid" id="menuContainer"></div>
+  </div>
+
+  <!-- 遊戲畫面 -->
+  <div id="gameScreen" class="game-screen">
+    <header>
+      <div class="question-box" onclick="speakQuestion()">
+        <span class="speaker-icon">🔊</span>
+        <span class="question-text" id="questionText">載入中...</span>
+      </div>
+    </header>
+
+    <div class="card-grid" id="cardGrid"></div>
+
+    <div class="footer-bar">
+      <button class="back-btn" onclick="returnHome()">🏠 主頁</button>
+      <div class="score-board">
+        連續答對：<span id="score">0</span> 題 🌟
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let topicDataMap = {}; 
+    let items = [];
+    let currentTarget = null;
+    let score = 0;
+    let isLock = false;
+
+    const presetIcons = {
+      '動物': '🐶', '水果': '🍎', '交通': '🚗', '蔬菜': '🥦', '顏色': '🎨', '數字': '🔢'
+    };
+
+    window.onload = () => {
+      const savedData = localStorage.getItem('flashcard_topics');
+      if (savedData) {
+        try {
+          topicDataMap = JSON.parse(savedData);
+          renderMenu();
+        } catch (e) {}
+      }
+    };
+
+    function parseTextToItems(rawText) {
+      if (!rawText) return [];
+      const lines = rawText.split(/\r?\n|\r/);
+      const parsedItems = [];
+
+      lines.forEach(line => {
+        const cleaned = line.trim();
+        if (cleaned.length > 0) {
+          const parts = cleaned.split(/[,，]/);
+          if (parts.length >= 2) {
+            parsedItems.push({
+              name: parts[0].trim(),
+              emoji: parts[1].trim()
+            });
+          }
+        }
+      });
+
+      return parsedItems;
+    }
+
+    function parseAndSaveMultiTopics() {
+      const rawText = document.getElementById('pastedText').value.trim();
+      if (!rawText) {
+        alert('請先貼上文字內容！');
+        return;
+      }
+
+      const lines = rawText.split(/\r?\n|\r/);
+      let currentTopic = '自訂主題';
+      let tempMap = {};
+
+      lines.forEach(line => {
+        const cleaned = line.trim();
+        if (!cleaned) return;
+
+        const headerMatch = cleaned.match(/^(?:主題|Topic)\s*[:：]\s*(.+)$/i) || cleaned.match(/^===\s*(.+?)\s*===$/);
+        
+        if (headerMatch) {
+          currentTopic = headerMatch[1].trim();
+          if (!tempMap[currentTopic]) {
+            tempMap[currentTopic] = [];
+          }
+        } else {
+          if (!tempMap[currentTopic]) {
+            tempMap[currentTopic] = [];
+          }
+          tempMap[currentTopic].push(cleaned);
+        }
+      });
+
+      let validCount = 0;
+      Object.keys(tempMap).forEach(topic => {
+        const contentStr = tempMap[topic].join('\n');
+        const parsedItems = parseTextToItems(contentStr);
+        // 🌟 門檻改為 3 個選項即可
+        if (parsedItems.length >= 3) {
+          topicDataMap[topic] = contentStr;
+          validCount++;
+        }
+      });
+
+      if (validCount > 0) {
+        localStorage.setItem('flashcard_topics', JSON.stringify(topicDataMap));
+        renderMenu();
+        document.getElementById('pastedText').value = '';
+        alert(`成功解析並儲存 ${validCount} 個主題卡片！`);
+      } else {
+        alert('未找到有效的題目，請確保每個主題至少有 3 個選項（格式：名稱,Emoji）！');
+      }
+    }
+
+    async function loadFiles(event) {
+      const files = event.target.files;
+      if (files.length === 0) return;
+
+      topicDataMap = {};
+      let txtCount = 0;
+
+      for (let file of files) {
+        if (file.name.toLowerCase().endsWith('.txt') && file.name.toLowerCase() !== 'topics.txt') {
+          const themeName = file.name.replace(/\.txt$/i, '');
+          const text = await file.text();
+          topicDataMap[themeName] = text;
+          txtCount++;
+        }
+      }
+
+      if (txtCount > 0) {
+        localStorage.setItem('flashcard_topics', JSON.stringify(topicDataMap));
+        renderMenu();
+        alert(`成功載入 ${txtCount} 個主題！`);
+      } else {
+        alert('找不到任何 .txt 檔案！');
+      }
+    }
+
+    function getThemeEmoji(themeName, textContent) {
+      if (presetIcons[themeName]) return presetIcons[themeName];
+      const parsed = parseTextToItems(textContent);
+      if (parsed.length > 0 && parsed[0].emoji) {
+        return parsed[0].emoji;
+      }
+      return '📁';
+    }
+
+    function renderMenu() {
+      const menuContainer = document.getElementById('menuContainer');
+      menuContainer.innerHTML = '';
+      
+      const themes = Object.keys(topicDataMap);
+      if (themes.length === 0) return;
+
+      themes.forEach(themeName => {
+        const textContent = topicDataMap[themeName];
+        const emoji = getThemeEmoji(themeName, textContent);
+
+        const card = document.createElement('div');
+        card.className = 'theme-card';
+        card.innerHTML = `
+          <div class="theme-icon">${emoji}</div>
+          <div class="theme-title">${themeName}</div>
+        `;
+        card.onclick = () => startGame(themeName);
+        menuContainer.appendChild(card);
+      });
+    }
+
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-HK';
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function speakQuestion() {
+      if (currentTarget) {
+        speak(`邊個係${currentTarget.name}呀？`);
+      }
+    }
+
+    function startGame(themeName) {
+      const text = topicDataMap[themeName];
+      if (!text) return;
+
+      items = parseTextToItems(text);
+
+      if (items.length < 3) {
+        alert(`主題「${themeName}」的題目少於 3 個！`);
+        return;
+      }
+
+      document.getElementById('homeScreen').style.display = 'none';
+      document.getElementById('gameScreen').style.display = 'flex';
+      score = 0;
+      document.getElementById('score').innerText = score;
+
+      nextQuestion();
+    }
+
+    function returnHome() {
+      window.speechSynthesis.cancel();
+      document.getElementById('gameScreen').style.display = 'none';
+      document.getElementById('homeScreen').style.display = 'flex';
+      renderMenu();
+    }
+
+    function nextQuestion() {
+      isLock = false;
+      const shuffled = [...items].sort(() => 0.5 - Math.random());
+      // 🌟 每次隨機抽取 3 個選項
+      const choices = shuffled.slice(0, 3);
+      currentTarget = choices[Math.floor(Math.random() * choices.length)];
+
+      document.getElementById('questionText').innerText = `邊個係 ${currentTarget.name}？`;
+      
+      const grid = document.getElementById('cardGrid');
+      grid.innerHTML = '';
+
+      choices.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-emoji">${item.emoji}</div>
+          <div class="card-label">${item.name}</div>
+        `;
+        card.onclick = () => checkAnswer(item, card);
+        grid.appendChild(card);
+      });
+
+      setTimeout(() => {
+        speakQuestion();
+      }, 300);
+    }
+
+    function checkAnswer(selectedItem, cardElement) {
+      if (isLock) return;
+
+      if (selectedItem.name === currentTarget.name) {
+        isLock = true;
+        cardElement.classList.add('correct');
+        score++;
+        document.getElementById('score').innerText = score;
+
+        playAndDo(`答對咗！呢個係${selectedItem.name}！`, () => {
+          nextQuestion();
+        });
+      } else {
+        cardElement.classList.add('wrong');
+        setTimeout(() => {
+          cardElement.classList.remove('wrong');
+        }, 500);
+
+        playAndDo(`呢個係${selectedItem.name}`, () => {
+          speakQuestion();
+        });
+      }
+    }
+
+    function playAndDo(text, callback) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-HK';
+        utterance.rate = 0.9;
+        
+        utterance.onend = () => {
+          if (callback) callback();
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } else {
+        if (callback) callback();
+      }
+    }
+  </script>
+</body>
+</html>
